@@ -4,16 +4,20 @@
 alter table albums
 drop column "album_id album artist_name release_date genres average_rating n";
 
--- add primary key
+-- add unique index concurrently
+create unique index concurrently pk_album
+on albums(album_id);
+
+-- create primary key using index
 alter table albums
-add primary key(album_id);
+add primary key using pk_album;
 
 -- add album index to get album details
-create index idx_album
+create index concurrently idx_album
 on albums(album);
 
 -- add covering index for albums by artist
-create index idx_artist_name
+create index concurrently idx_artist_name
 on albums(artist_name)
 include (album);
 
